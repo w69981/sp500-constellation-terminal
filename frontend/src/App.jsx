@@ -4,8 +4,10 @@ import RetroWindow from './components/RetroWindow';
 import ConstellationGraph from './components/ConstellationGraph';
 import FALLBACK_STOCKS from './data/fallbackData';
 
-// API URL — uses env variable or defaults to localhost backend
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// API URL detection:
+// - On Vercel: same origin, use relative /api/ paths
+// - Locally: VITE_API_URL env or fallback to localhost:8000
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 // S&P 500 GICS Sectors
 const SECTORS = [
@@ -43,26 +45,43 @@ function App() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Fetch stock data from backend with fallback
+  // Fetch stock data — tries API, falls back to embedded data
   useEffect(() => {
     const fetchStocks = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/api/stocks`, {
-          signal: AbortSignal.timeout(5000),
-        });
-        if (!response.ok) throw new Error('API error');
-        const data = await response.json();
-        setStocks(data.stocks || []);
-        setLastUpdated(data.last_updated);
-        setIsOffline(false);
-        setError(null);
+
+        // Try primary API (relative path for Vercel, or VITE_API_URL)
+        let response = null;
+        const urls = API_URL
+          ? [`${API_URL}/api/stocks`]
+          : ['/api/stocks', 'http://localhost:8000/api/stocks'];
+
+        for (const url of urls) {
+          try {
+            response = await fetch(url, { signal: AbortSignal.timeout(8000) });
+            if (response.ok) break;
+            response = null;
+          } catch { response = null; }
+        }
+
+        if (response) {
+          const data = await response.json();
+          if (data.stocks && data.stocks.length > 0) {
+            setStocks(data.stocks);
+            setLastUpdated(data.last_updated);
+            setIsOffline(false);
+            setError(null);
+            return;
+          }
+        }
+        throw new Error('No API available');
       } catch (err) {
-        console.warn('Backend unavailable, using fallback data:', err.message);
+        console.warn('APIs unavailable, using fallback data:', err.message);
         setStocks(FALLBACK_STOCKS);
         setLastUpdated(new Date().toISOString());
         setIsOffline(true);
-        setError(null); // Don't show error — graceful fallback
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -76,12 +95,19 @@ function App() {
     if (isOffline) return null;
     try {
       setIsLoadingLive(true);
-      const response = await fetch(`${API_URL}/api/stock/${ticker}`, {
-        signal: AbortSignal.timeout(3000),
-      });
-      if (!response.ok) return null;
-      const data = await response.json();
-      if (data.success && data.stock) return data.stock;
+      // Try query-param style (Vercel) then path-param style (FastAPI)
+      const urls = API_URL
+        ? [`${API_URL}/api/stock/${ticker}`]
+        : [`/api/stock?ticker=${ticker}`, `http://localhost:8000/api/stock/${ticker}`];
+
+      for (const url of urls) {
+        try {
+          const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
+          if (!response.ok) continue;
+          const data = await response.json();
+          if (data.success && data.stock) return data.stock;
+        } catch { continue; }
+      }
     } catch (err) {
       console.error('Error fetching live data:', err);
     } finally {
