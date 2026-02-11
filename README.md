@@ -4,7 +4,9 @@ Interaktywna wizualizacja wszystkich 500+ spółek indeksu S&P 500 w formie kons
 
 ## 🌐 Demo Online
 
-> **Vercel:** [Link do demo](https://your-project.vercel.app) *(uzupełnij po deployment)*
+> **Vercel:** [Link do demo](https://sp500-constellation-terminal.vercel.app) *(uzupełnij po deployment)*
+>
+> **GitHub:** [w69981/sp500-constellation-terminal](https://github.com/w69981/sp500-constellation-terminal)
 
 Aplikacja działa w pełni bez backendu — w trybie offline wyświetla 50 największych spółek z danymi z cache.
 
