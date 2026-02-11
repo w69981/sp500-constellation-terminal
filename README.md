@@ -4,7 +4,7 @@ Interaktywna wizualizacja wszystkich 500+ spółek indeksu S&P 500 w formie kons
 
 ## 🌐 Demo Online
 
-> **Vercel:** [Link do demo](https://sp500-constellation-terminal.vercel.app) *(uzupełnij po deployment)*
+> **🌐 Live Demo:** [melodious-phoenix-660ab6.netlify.app](https://melodious-phoenix-660ab6.netlify.app)
 >
 > **GitHub:** [w69981/sp500-constellation-terminal](https://github.com/w69981/sp500-constellation-terminal)
 
