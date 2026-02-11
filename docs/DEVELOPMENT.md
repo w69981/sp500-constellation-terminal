@@ -97,40 +97,9 @@ Stworzenie interaktywnej wizualizacji wszystkich 503 spółek indeksu S&P 500 w 
 
 ---
 
-## 4. Podział Zadań (Role)
+## 4. Decyzje Projektowe
 
-### Backend Developer
-1. Konfiguracja FastAPI z CORS i uvicorn
-2. Parsowanie listy S&P 500 z Wikipedia (`pandas.read_html`)
-3. Integracja z Yahoo Finance API (`yfinance`)
-4. Implementacja wielowarstwowego fallbacku cenowego
-5. System cache JSON z walidacją (min 400 akcji)
-6. REST API — 5 endpointów
-7. Serverless functions (Vercel-compatible)
-
-### Frontend Developer
-1. Inicjalizacja React 19 / Vite 7 / Tailwind CSS 4
-2. Design system retro (VT323, Press Start 2P, CRT scanlines)
-3. Komponent ConstellationGraph — graf siłowy z Canvas rendering
-4. Komponent RetroWindow — draggable window z minimize
-5. Layout 6 paneli informacyjnych (MARKET DATA, SECTOR FILTER, etc.)
-6. Multi-stage API fetch z kaskadowym fallbackiem
-7. Responsywny design (mobile drawer, breakpoints 480/768/1024px)
-8. Generacja fallbackData.js (503 spółek z cache JSON)
-
-### Full-Stack / DevOps
-1. Konfiguracja środowiska deweloperskiego
-2. Integracja frontend ↔ backend (CORS, proxy)
-3. Konfiguracja deployment (Netlify + Vercel)
-4. GitHub repository management (commits, push)
-5. Testowanie end-to-end (browser automation)
-6. Dokumentacja techniczna i użytkowa
-
----
-
-## 5. Decyzje Projektowe
-
-### 5.1 Wybór technologii
+### 4.1 Wybór technologii
 
 | Obszar | Wybór | Alternatywy | Uzasadnienie |
 |--------|-------|-------------|--------------|
@@ -142,7 +111,7 @@ Stworzenie interaktywnej wizualizacji wszystkich 503 spółek indeksu S&P 500 w 
 | CSS framework | **Tailwind CSS 4** | Styled Components, CSS Modules | Szybkie prototypowanie, utility-first |
 | Hosting | **Netlify** | Vercel, GitHub Pages | Proste, bezpłatne, auto-deploy z GitHub |
 
-### 5.2 Kluczowe decyzje architektoniczne
+### 4.2 Kluczowe decyzje architektoniczne
 
 | Decyzja | Uzasadnienie |
 |---------|--------------|
@@ -155,7 +124,7 @@ Stworzenie interaktywnej wizualizacji wszystkich 503 spółek indeksu S&P 500 w 
 
 ---
 
-## 6. Problemy Napotkane i Rozwiązania
+## 5. Problemy Napotkane i Rozwiązania
 
 ### Problem 1: Yahoo Finance API niedostępne w weekend/noc
 **Opis:** yfinance zwraca `JSONDecodeError` lub timeout poza godzinami giełdy  
@@ -180,7 +149,7 @@ Stworzenie interaktywnej wizualizacji wszystkich 503 spółek indeksu S&P 500 w 
 
 ---
 
-## 7. Metryki Projektu
+## 6. Metryki Projektu
 
 ### Rozmiar kodu źródłowego (bez generowanego fallbackData.js)
 | Plik | Linie kodu | Opis |
@@ -209,7 +178,7 @@ Stworzenie interaktywnej wizualizacji wszystkich 503 spółek indeksu S&P 500 w 
 
 ---
 
-## 8. Wnioski i Rekomendacje
+## 7. Wnioski i Rekomendacje
 
 ### Co poszło dobrze
 1. FastAPI umożliwił szybki prototyp backendu z automatyczną dokumentacją Swagger
